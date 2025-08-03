@@ -1,16 +1,14 @@
 // /pages/index.tsx
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import type { StatsData } from '../types';
 
 export default function Home() {
   const [requests, setRequests] = useState<number>(0);
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
     // Создаем EventSource подключение
     const eventSource = new EventSource('/api/stats-stream');
-    eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {
       setIsConnected(true);
@@ -32,10 +30,8 @@ export default function Home() {
 
     // Очистка при размонтировании
     return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        setIsConnected(false);
-      }
+      eventSource.close();
+      setIsConnected(false);
     };
   }, []);
 
