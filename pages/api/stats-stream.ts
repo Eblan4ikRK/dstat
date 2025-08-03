@@ -1,6 +1,6 @@
 // /pages/api/stats-stream.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import statsStore from '../lib/statsStore';
+import statsStore from '../../lib/statsStore';
 
 export const config = {
   api: {
@@ -16,7 +16,7 @@ export default async function handler(
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
-  res.setHeader('X-Accel-Buffering', 'no'); // Для Nginx
+  res.setHeader('X-Accel-Buffering', 'no');
 
   const sendStats = async () => {
     try {
@@ -26,7 +26,7 @@ export default async function handler(
         timestamp: Date.now()
       });
       
-      res.write(`data: ${data}\n\n`);
+      res.write(` ${data}\n\n`);
     } catch (error) {
       console.error('Error sending stats:', error);
     }
